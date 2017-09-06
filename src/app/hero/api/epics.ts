@@ -1,5 +1,4 @@
 import { Epic } from 'redux-observable';
-//import { Middleware } from 'redux';
 import { of } from 'rxjs/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -19,21 +18,13 @@ const heroesNotAlreadyFetched = (
     state.heroes &&
     state.heroes.heroes.length);
 
-// const heroesNotAlreadyFetched = (
-//   state: IAppState): boolean => !(false);
-
-
-
 export default function createLoadHeroEpic(): Epic<HeroAPIAction, IAppState> {
-    console.log('in createLoadHeroEpic');
     var service = new HeroAPIService();
     var actions = new HeroAPIActions();
     return (action$, store) => action$
       .ofType(HeroAPIActions.LOAD_HEROES)
-      .do(x => console.log(x))
       .filter(() => heroesNotAlreadyFetched(store.getState()))
       .switchMap(() => service.getAll()
-        .do(data => console.log(data))
         .map(data => actions.loadSucceeded(data))
         .catch(response => of(actions.loadFailed({
           status: '' + response.status,
