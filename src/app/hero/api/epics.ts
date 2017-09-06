@@ -9,7 +9,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/do';
 
 import { IAppState } from '../../store/model';
-import { HeroAPIAction, HeroAPIActions } from './actions';
+import { HeroAPIAction, LOAD_HEROES, loadSucceeded, loadFailed, loadStarted} from './actions';
 import { HeroAPIService } from './service';
 
 const heroesNotAlreadyFetched = (
@@ -20,14 +20,13 @@ const heroesNotAlreadyFetched = (
 
 export default function createLoadHeroEpic(): Epic<HeroAPIAction, IAppState> {
     var service = new HeroAPIService();
-    var actions = new HeroAPIActions();
     return (action$, store) => action$
-      .ofType(HeroAPIActions.LOAD_HEROES)
+      .ofType(LOAD_HEROES)
       .filter(() => heroesNotAlreadyFetched(store.getState()))
       .switchMap(() => service.getAll()
-        .map(data => actions.loadSucceeded(data))
-        .catch(response => of(actions.loadFailed({
+        .map(data => store.dispatch(loadSucceeded(data)))
+        .catch(response => of(store.dispatch(loadFailed({
           status: '' + response.status,
-        })))
-        .startWith(actions.loadStarted()));
+        }))))
+        .startWith(store.dispatch(loadStarted())));
   }
