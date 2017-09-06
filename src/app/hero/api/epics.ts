@@ -24,9 +24,9 @@ export default function createLoadHeroEpic(): Epic<HeroAPIAction, IAppState> {
       .ofType(LOAD_HEROES)
       .filter(() => heroesNotAlreadyFetched(store.getState()))
       .switchMap(() => service.getAll()
-        .map(data => store.dispatch(loadSucceeded(data)))
-        .catch(response => of(store.dispatch(loadFailed({
+        .map(data => loadSucceeded(data))
+        .catch(response => of(loadFailed({
           status: '' + response.status,
-        }))))
-        .startWith(store.dispatch(loadStarted())));
+        })))
+        .startWith(loadStarted()));
   }

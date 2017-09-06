@@ -6,7 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware, ConnectedRouter } from 'react-router-redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { reducers } from './app/store';
+import { reducers } from './app/store/reducers';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import HeroListContainerComponent from './app/hero/heroListContainer';
