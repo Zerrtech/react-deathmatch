@@ -15,8 +15,6 @@ export function createHeroAPIReducer() {
     a: Action): IHeroList {
 
     const action = a as HeroAPIAction;
-    console.log('in hero reducer, action type:', action.type);
-    //state:', state, ' action:', a);
 
     switch (action.type) {
       case HeroAPIActions.LOAD_STARTED:
